@@ -1,8 +1,8 @@
 import instagrapi
 
 # Replace with your Instagram account credentials
-username = "dhyancanplay@gmail.com"
-password = "papanmom2008@@"
+username = "email@gmail.com"
+password = "password@123"
 
 # Replace with the path to your reel video file
 reel_path = "/upload_video/reel.mp4"
