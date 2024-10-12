@@ -1,28 +1,37 @@
 import os
+import re
 import time
 from instagrapi import Client
 
-# Login to Instagram
-username = "your_username"
-password = "your_password"
+# Instagram login
+cl = Client()
+cl.login('username', 'password')
 
-client = Client()
-client.login(username, password)
+# Path to the folder containing reels
+folder_path = './output_video'
+caption = "Follow for more naruto episodes Daily.   This Reel was uploaded with Code.  #anime #naruto #hinata #animeart #animegirl #animeedits #animememes #narutoshippuden #animeedit #animes #animelover #animedrawing #animeboy #animegirls #animelove #animefan #animeworld #animefanart #narutouzumaki #animefans #animeartist #animeaccount #animescene #animejapan #animewallpaper #animeromance #anime_sketches25 #animerecommendations #weeaboo"
+thumbnail = './output_folder/thumbnail.jpg'
+# Function to extract numbers from filenames
+def extract_number(filename):
+    match = re.search(r'\d+', filename)  # Find digits in the filename
+    return int(match.group()) if match else float('inf')  # Return a large number if no digits
 
-# Folder containing reels
-folder_path = "path_to_your_folder"
+# Get a list of all video files in the folder
+video_files = [f for f in os.listdir(folder_path) if f.endswith(('.mp4', '.mov'))]
 
-# Caption and hashtags for the posts
-caption = "Your caption here #hashtag1 #hashtag2"
+# Sort the files by the number in their filenames
+video_files.sort(key=extract_number)
 
-# Get list of video files in the folder
-reels = [f for f in os.listdir(folder_path) if f.endswith(('.mp4', '.mov'))]
+# Upload each video one by one
+for video_file in video_files:
+    video_path = os.path.join(folder_path, video_file)
+    try:
+        cl.clip_upload(video_path, caption=caption, thumbnail=thumbnail)
+        print(f"Uploaded: {video_file}")
+    except Exception as e:
+        print(f"Failed to upload {video_file}: {e}")
 
-# Upload each reel with a 50-minute gap
-for reel in reels:
-    reel_path = os.path.join(folder_path, reel)
-    client.clip_upload(reel_path, caption)
-    print(f"Uploaded: {reel}")
+    # Wait for 5 minutes (300 seconds) between uploads
+    time.sleep(300)
 
-    # Wait for 50 minutes before uploading the next reel
-    time.sleep(50 * 60)
+print("All uploads complete!")
