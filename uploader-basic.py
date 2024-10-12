@@ -20,7 +20,7 @@ client = instagrapi.Client()
 client.login(username, password)
 
 # Upload the reel with caption and thumbnail
-reel_result = client.upload_reel(reel_path, caption=caption, thumbnail=thumbnail_path)
+reel_result = client.clip_upload(reel_path, caption=caption, thumbnail=thumbnail_path)
 
 # Print the reel's ID for reference
 print("Reel ID:", reel_result.id)
